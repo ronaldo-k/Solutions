@@ -116,5 +116,14 @@ int main() {
 					printf("-1\n");
 			}
 		}
+		
+//		debug("State of b after operation #%d:\n", i);
+//		for(int j = 1; j <= n; j++) {
+//			debug("Node %d: ", j);
+//			for(set < int >::iterator a = b[j].begin(); a != b[j].end(); a++) {
+//				debug("%d ", *a);
+//			}
+//			debug("\n");
+//		}
 	}
 }
