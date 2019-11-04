@@ -1,3 +1,5 @@
+// BINARY SEARCH IN SEGMENT TREE — ORDERSET (Insert source)
+
 #include <stdio.h>
 #include <vector>
 
@@ -21,13 +23,13 @@ void update(int pos, int ini, int fim, int id, int val) {
 	if(ini == fim) {
 		sum[pos] = val; return;
 	}
-	
+
 	int m = (ini + fim) / 2;
 	if(ini == fim - 1) m = ini;
-	
+
 	if(id <= m) {
 		if(e[pos] == -1) {
-			int aux = create(); e[pos] = aux; 
+			int aux = create(); e[pos] = aux;
 		}
 		update(e[pos], ini, m, id, val);
 	}
@@ -37,7 +39,7 @@ void update(int pos, int ini, int fim, int id, int val) {
 		}
 		update(d[pos], m+1, fim, id, val);
 	}
-	
+
 	if(e[pos] == -1) sum[pos] = sum[d[pos]];
 	else if(d[pos] == -1) sum[pos] = sum[e[pos]];
 	else sum[pos] = sum[e[pos]] + sum[d[pos]];
@@ -48,20 +50,20 @@ int query(int pos, int ini, int fim, int q) {
 	if(fim <= q) {
 		return sum[pos];
 	}
-	
+
 	int m = (ini + fim) / 2;
 	if(ini == fim - 1) m = ini;
-	
+
 	return query(d[pos], m+1, fim, q) + query(e[pos], ini, m, q);
 }
 
 int binarySearch(int pos, int ini, int fim, int v) {
 	if(ini == fim) return ini;
-	
+
 	int se = (e[pos] == -1) ? 0 : sum[e[pos]];
 	int m = (ini + fim) / 2;
 	if(ini == fim - 1) m = ini;
-	
+
 	if(se >= v) {
 		return binarySearch(e[pos], ini, m, v);
 	}
@@ -76,7 +78,7 @@ int main() {
 	for(int i = 0; i < q; i++) {
 		char top; int ta;
 		scanf(" %c %d", &top, &ta);
-		
+
 		if(top == 'I') {
 			update(1, -INF, INF, ta, 1);
 		}
