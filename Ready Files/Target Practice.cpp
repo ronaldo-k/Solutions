@@ -1,3 +1,5 @@
+// GEOMETRY – Target Practice (Kattis)
+
 #include <stdio.h>
 #include <string.h>
 

@@ -49,8 +49,10 @@ void update(int pos, int beg, int fin, int id, int val) {
 		update(d[pos], m+1, fin, id, val);
 	}
 
-	int sumE = (e[pos] == -1) ? (m - beg + 1) : sum[e[pos]];
-	int sumD = (d[pos] == -1) ? (fin - m+1 + 1) : sum[d[pos]];
+	int sumE = 0, sumD = 0;
+
+	if(e[pos] != -1) sumE = (m - beg + 1) - sum[e[pos]];
+	if(d[pos] != -1) sumD = (fin - m+1 + 1) - sum[d[pos]];
 
 	sum[pos] = sumE + sumD;
 }
@@ -58,12 +60,12 @@ void update(int pos, int beg, int fin, int id, int val) {
 int binarySearch(int pos, int beg, int fin, int amt) {
 	// Returns the first index where the amount of 1s between 1 and amt
 	// (inclusive) is greater or equal to amt.
-	
+
 	if(pos == -1) {
-		//debug("[BS] Returning %d + %d - 1 = %d\n", beg, amt, beg + amt - 1);
+		debug("[BS] Returning %d + %d - 1 = %d\n", beg, amt, beg + amt - 1);
 		return beg + amt - 1;
 	}
-	
+
 	if(beg == fin) return beg;
 
 	int sumE = (e[pos] == -1) ? (m - beg + 1) : sum[e[pos]];
@@ -84,9 +86,9 @@ int binarySearch(int pos, int beg, int fin, int amt) {
 //int fixBinarySearch(int pos, int beg, int fin, int id) {
 //	int id1 = binarySearch(1, 1, n, id);
 //	int id2 = binarySearch(1, 1, n, id-1);
-//	
+//
 //	if(id2 > id1) id1 += 2;
-//	
+//
 //	return id1;
 //}
 
