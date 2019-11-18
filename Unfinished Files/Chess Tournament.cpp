@@ -8,14 +8,15 @@ using namespace std;
 
 const int MAXN = 5e5 + 10;
 
-int n, m, fat[MAXN], dpt[MAXN], mrk[MAXN], inDeg[MAXN];
+bool isConsistent = true;
+int n, m, amt, rep[MAXN], dpt[MAXN], mrk[MAXN], inDeg[MAXN];
 
-vector < int > g[MAXN];
+vector < int > g[MAXN], w[MAXN];
 queue < int > q;
 
 int find(int a) {
-	if(a == fat[a]) return a;
-	else return fat[a] = find(fat[a]);
+	if(a == rep[a]) return a;
+	else return rep[a] = find(rep[a]);
 }
 
 void join(int a, int b) {
@@ -25,10 +26,10 @@ void join(int a, int b) {
 	if(a == b) return;
 
 	if(dpt[a] > dpt[b]) {
-		fat[b] = a;
+		rep[b] = a;
 		return;
 	}
-	fat[a] = b;
+	rep[a] = b;
 
 	if(dpt[a] == dpt[b]) {
 		dpt[b]++;
@@ -39,19 +40,21 @@ int main() {
 	scanf("%d %d", &n, &m);
 
 	for(int i = 0; i < n; i++) {
-		fat[i] = i;
+		rep[i] = i;
 		dpt[i] = 0;
 	}
 
 	for(int i = 0; i < m; i++) {
-		char tc; int ta, tb;
+		char tc; int ta, tb, tw;
 		scanf("%d %c %d", &ta, &tc, &tb);
 
 		if(tc == '=') {
-			join(ta, tb); continue;
+			join(ta, tb); tw = 0;
 		}
-		g[tb].push_back(ta);
-		inDeg[ta]++;
+		else tw = 1;
+		g[ta].push_back(tb);
+		w[ta].push_back(tw);
+		inDeg[tb]++;
 	}
 
 	for(int i = 0; i < n; i++) {
@@ -62,12 +65,13 @@ int main() {
 
 	while(!q.empty()) {
 		int cur = q.front(); q.pop();
+		debug("cur = %d\n", cur);
 
 		for(int i = 0; i < g[cur].size(); i++) {
-			int ngb = g[cur][i]; ngb = fat[ngb];
+			int ngb = g[cur][i];
 			inDeg[ngb]--;
 			if(mrk[ngb] == 0 && inDeg[ngb] == 0) {
-				mrk[ngb] = mrk[cur] + 1;
+				mrk[ngb] = 1;
 				q.push(ngb);
 			}
 		}
@@ -77,8 +81,16 @@ int main() {
 		debug("%d (%d): ", i, mrk[i]);
 
 		for(int j = 0; j < g[i].size(); j++) {
-			if(mrk[g[i][j]] == 0) debug("%d ", g[i][j]);
+			int ngb = g[i][j], nw = w[i][j];
+			if(mrk[ngb] == 0) {
+				debug("%d ", ngb);
+				amt++;
+			}
 		}
 		debug("\n");
 	}
+
+	if(amt > 2) isConsistent = false;
+
+	printf( (isConsistent) ? ("consistent\n") : ("inconsistent\n") );
 }
